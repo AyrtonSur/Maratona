@@ -2,69 +2,51 @@
 
 using namespace std;
 
-vector<int> buckets1;
-vector<int> buckets2;
 set<int> trips;
 
-void trip(int n, int fill) {
-  if (n <= 0) {
+void trip(int n, int fill, vector<int> buckets1, vector<int> buckets2) {
+  if (n == 0) {
     trips.insert(fill);
     return;
   }
-
-  int step = n - 1;
-
-  if(n % 2 == 0) {
-    int size_b1 = buckets1.size();
-
-    for (int i = 0; i < size_b1; i++) {
-      fill -= buckets1[i];
-      buckets2.insert(buckets2.begin(), buckets1[i]);
-      buckets1.erase(buckets1.begin() + i);
-      trip(step, fill);
-      fill += buckets2[0];
-      buckets1.insert(buckets1.begin(), buckets2[0]);
-      buckets2.erase(buckets2.begin());
+  
+  if (n % 2 == 0) {
+    for (int i = 0; i < buckets1.size(); i++) {
+      int bucket = buckets1[i];
+      vector<int> new_b1 = buckets1;
+      vector<int> new_b2 = buckets2;
+      new_b1.erase(new_b1.begin() + i);
+      new_b2.push_back(bucket);
+      trip(n - 1, fill - bucket, new_b1, new_b2);
     }
-  } else if (n % 2 != 0) {
-    int size_b2 = buckets2.size();
-
-    for (int i = 0; i < size_b2; i++) {
-      fill += buckets2[i];
-      buckets1.insert(buckets1.begin(), buckets2[i]);
-      buckets2.erase(buckets2.begin() + i);
-      trip(step, fill);
-      fill -= buckets1[0];
-      buckets2.insert(buckets2.begin(), buckets1[0]);
-      buckets1.erase(buckets1.begin());
+  } else {
+    for (int i = 0; i < buckets2.size(); i++) {
+      int bucket = buckets2[i];
+      vector<int> new_b1 = buckets1;
+      vector<int> new_b2 = buckets2;
+      new_b2.erase(new_b2.begin() + i);
+      new_b1.push_back(bucket);
+      trip(n - 1, fill + bucket, new_b1, new_b2);
     }
   }
 }
 
 int main() {
   int input;
+  vector<int> buckets1, buckets2;
 
   for (int i = 0; i < 10; i++) {
     cin >> input;
-
     buckets1.push_back(input);
   }
 
   for (int i = 0; i < 10; i++) {
     cin >> input;
-
-    buckets2.push_back(input);  
+    buckets2.push_back(input);
   }
 
-  trip(4, 1000);
-
-  cout << trips.size();
-
-  cout << "{ ";
-  for (int x : trips) {
-    cout << x << " ";
-  }
-  cout << "}";
+  trip(4, 1000, buckets1, buckets2);
+  cout << trips.size() << endl;
 
   return 0;
 }
