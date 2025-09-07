@@ -9,7 +9,7 @@ void trip(int n, int fill, vector<int> buckets1, vector<int> buckets2) {
     trips.insert(fill);
     return;
   }
-  
+
   if (n % 2 == 0) {
     for (int i = 0; i < buckets1.size(); i++) {
       int bucket = buckets1[i];
@@ -32,6 +32,12 @@ void trip(int n, int fill, vector<int> buckets1, vector<int> buckets2) {
 }
 
 int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+
+  freopen("backforth.in", "r", stdin);
+  freopen("backforth.out", "w", stdout);
+
   int input;
   vector<int> buckets1, buckets2;
 
