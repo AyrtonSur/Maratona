@@ -3,16 +3,16 @@
     {
       "type": "cppbuild",
       "label": "C/C++: g++.exe build active file",
-      "command": "C:/ProgramData/mingw64/mingw64/bin/g++.exe",
+      "command": "/usr/bin/g++",
       "args": [
         "-fdiagnostics-color=always",
         "-g",
         "${file}",
         "-o",
-        "${fileDirname}\\${fileBasenameNoExtension}.exe"
+        "${fileDirname}/${fileBasenameNoExtension}.out"
       ],
       "options": {
-        "cwd": "C:/ProgramData/mingw64/mingw64/bin"
+        "cwd": "${workspaceFolder}"
       },
       "problemMatcher": [
         "$gcc"
