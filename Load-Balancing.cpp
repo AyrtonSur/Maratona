@@ -31,7 +31,7 @@ int max_num_cows(int a, int b, vector<pair<int, int>> points) {
   }
 
   for (pair<int, int> p : right) {
-    if (p.first < b) {
+    if (p.second < b) {
       botr.push_back(p);
     } else {
       topr.push_back(p);
@@ -47,8 +47,8 @@ int main()
 {
   fast_io();
 
-  // freopen("bcount.in", "r", stdin);
-  // freopen("bcount.out", "w", stdout);
+  freopen("balancing.in", "r", stdin);
+  freopen("balancing.out", "w", stdout);
 
   int n, B;
 
@@ -130,7 +130,7 @@ int main()
   res = min(max_num_cows(a2, b1, points), res);
   res = min(max_num_cows(a2, b2, points), res);
 
-  cout << res;
+  cout << res << endl;
 
   return 0;
 }
