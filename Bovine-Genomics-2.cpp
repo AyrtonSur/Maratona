@@ -31,37 +31,47 @@ int main() {
   set<string> vec_chars_spotty[total_m];
   set<string> vec_chars_plain[total_m];
 
-  int idx = 0;
-  for (int i = 0; i < m - 2; i++) {
-    for (int j = i + 1; j < m - 1; j++) {
+  set<tuple<int, int, int>> pre_process_vec;
+
+  for (int i = 0; i < m; i++) {
+    for (int j = i + 1; j < m; j++) {
       for (int k = j + 1; k < m; k++) {
-        for (int w = 0; w < n; w++) {
-          string s(1, initial_vec_chars_plain[w][i]); 
-          s += initial_vec_chars_plain[w][j];
-          s += initial_vec_chars_plain[w][k];
-          vec_chars_plain[idx].emplace(s);
-
-          string st(1, initial_vec_chars_spotty[w][i]); 
-          st += initial_vec_chars_spotty[w][j];
-          st += initial_vec_chars_spotty[w][k];
-          vec_chars_spotty[idx].emplace(st);
-        }
-
-        idx++;
+        pre_process_vec.emplace(tuple(i, j, k));
       }
     }
+  }
+
+  int idx = 0;
+  for (auto [i, j, k] : pre_process_vec) {
+    for (int w = 0; w < n; w++) {
+      string s(1, initial_vec_chars_plain[w][i]); 
+      s += initial_vec_chars_plain[w][j];
+      s += initial_vec_chars_plain[w][k];
+      vec_chars_plain[idx].emplace(s);
+
+      string st(1, initial_vec_chars_spotty[w][i]); 
+      st += initial_vec_chars_spotty[w][j];
+      st += initial_vec_chars_spotty[w][k];
+      vec_chars_spotty[idx].emplace(st);
+    }
+
+    idx++;
   }
 
   int res = 0;
   int size1, size2;
 
   for (int i = 0; i < total_m; i++) {
-    size1 = vec_chars_plain[i].size();
-    size2 = vec_chars_spotty[i].size();
+    bool can_explain = true;
 
-    vec_chars_plain[i].merge(vec_chars_spotty[i]);
+    for (string s : vec_chars_spotty[i]) {
+      if (vec_chars_plain[i].find(s) != vec_chars_plain[i].end()) {
+        can_explain = false;
+        break;
+      }
+    }
 
-    if (vec_chars_plain[i].size() == (size1 + size2)) res++;
+    if (can_explain) res++;
   }
 
   cout << res << endl;
