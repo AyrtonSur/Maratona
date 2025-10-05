@@ -10,36 +10,22 @@ void fast_io()
 }
 
 int max_num_cows(int a, int b, vector<pair<int, int>> points) {
-  vector<pair<int, int>> left, right;
+  int topl = 0, topr = 0, botl = 0, botr = 0;
 
   for (pair<int, int> p : points) {
-    if (p.first < a) {
-      left.push_back(p);
+    if (p.first < a && p.second < b) {
+      botl++;
+    } else  if (p.first < a) {
+      topl++;
+    } else if (p.first > a && p.second < b) {
+      botr++;
     } else {
-      right.push_back(p);
+      topr++;
     }
   }
 
-  vector<pair<int, int>> topl, topr, botl, botr;
-
-  for (pair<int, int> p : left) {
-    if (p.second < b) {
-      botl.push_back(p);
-    } else {
-      topl.push_back(p);
-    }
-  }
-
-  for (pair<int, int> p : right) {
-    if (p.second < b) {
-      botr.push_back(p);
-    } else {
-      topr.push_back(p);
-    }
-  }
-
-  int max1 = max(botr.size(), topr.size());
-  int max2 = max(botl.size(), topl.size());
+  int max1 = max(botr, topr);
+  int max2 = max(botl, topl);
   return max(max1, max2);
 }
 
@@ -50,15 +36,12 @@ int main()
   freopen("balancing.in", "r", stdin);
   freopen("balancing.out", "w", stdout);
 
-  int n, B;
+  int n;
 
-  cin >> n >> B;
+  cin >> n;
 
-  vector<int> xs;
-  vector<int> ys;
   vector<pair<int, int>> points;
-  int x_median;
-  int y_median;
+  set<tuple<int, int>> set_of_points;
 
   for (int i = 0; i < n; i++) {
     int x, y;
@@ -71,8 +54,12 @@ int main()
 
   for (auto &[a, b] : points) {
     for (auto &[c, d] : points) {
-      res = min(max_num_cows(a + 1, d + 1, points), res);
+      set_of_points.emplace(a + 1, d + 1);
     }
+  }
+
+  for (auto [a, b] : set_of_points) {
+    res = min(max_num_cows(a, b, points), res);    
   }
 
   cout << res << endl;
